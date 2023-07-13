@@ -24,7 +24,15 @@ pipeline{
                 sh "docker build . -t praveenhema/webapps:${DOCKER_TAG} "
             }
         }
-        
+        stage('DockerHub Push'){
+            steps{
+                withCredentials([string(credentialsId: 'docker-hub', variable: 'dockerHubPwd')]) {
+                    sh "docker login -u praveenhema -p ${dockerHubPwd}"
+                }
+                
+                sh "docker push praveenhema/webapps:${DOCKER_TAG} "
+            }
+        }
         
     }
 }
